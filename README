@@ -1,0 +1,78 @@
+NAME
+    Perinci::Access::Schemeless::DBI - Subclass of
+    Perinci::Access::Schemeless which gets lists of entities (and metadata)
+    from DBI database
+
+VERSION
+    version 0.01
+
+DESCRIPTION
+    This subclass of Perinci::Access::Schemeless gets lists of code entities
+    (currently only packages and functions) from a DBI database (instead of
+    from listing Perl packages on the filesystem). It can also retrieve
+    Rinci metadata from said database (instead of from %SPEC package
+    variables).
+
+    Currently, you must have a table containing list of packages named
+    "module" with columns "name" (module name), "metadata" (Rinci metadata,
+    encoded in JSON); and a table containing list of functions named
+    "function" with columns "module" (module name), "name" (function name),
+    and "metadata" (normalized Rinci metadata, encoded in JSON). Table and
+    column names will be configurable in the future. An example of the
+    table's contents:
+
+     name      metadata
+     ----      ---------
+     Foo::Bar  (null)
+     Foo::Baz  {"v":"1.1"}
+
+     module    name         metadata
+     ------    ----         --------
+     Foo::Bar  func1        {"v":"1.1","summary":"function 1","args":{}}
+     Foo::Bar  func2        {"v":"1.1","summary":"function 2","args":{}}
+     Foo::Baz  func3        {"v":"1.1","summary":"function 3","args":{"a":{"schema":["int",{},{}]}}}
+
+HOW IT WORKS
+    The subclass overrides get_meta() and action_list().
+
+METHODS
+new(%args) => OBJ
+    Aside from its parent class, this class recognizes these attributes:
+
+    *   dbh => OBJ (required)
+
+        DBI database handle.
+
+FAQ
+  Rationale for this module?
+    If you have a large number of packages and functions, you might want to
+    avoid reading Perl modules on the filesystem.
+
+SEE ALSO
+    Riap, Rinci
+
+HOMEPAGE
+    Please visit the project's homepage at
+    <https://metacpan.org/release/Perinci-Access-Schemeless-DBI>.
+
+SOURCE
+    Source repository is at
+    <https://github.com/sharyanto/perl-Perinci-Access-Schemeless-DBI>.
+
+BUGS
+    Please report any bugs or feature requests on the bugtracker website
+    <https://rt.cpan.org/Public/Dist/Display.html?Name=Perinci-Access-Scheme
+    less-DBI>
+
+    When submitting a bug or request, please include a test-file or a patch
+    to an existing test-file that illustrates the bug or desired feature.
+
+AUTHOR
+    Steven Haryanto <stevenharyanto@gmail.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2014 by Steven Haryanto.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
