@@ -27,7 +27,7 @@ resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=Perinci-Access-Schemeless-DBI
   homepage: https://metacpan.org/release/Perinci-Access-Schemeless-DBI
   repository: git://github.com/sharyanto/perl-Perinci-Access-Schemeless-DBI.git
-version: '0.01'
+version: '0.02'
 x_Dist_Zilla:
   perl:
     version: '5.018002'

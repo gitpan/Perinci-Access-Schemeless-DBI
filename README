@@ -4,7 +4,25 @@ NAME
     from DBI database
 
 VERSION
-    version 0.01
+    version 0.02
+
+SYNOPSIS
+     use DBI;
+     use Perinci::Access::Schemeless::DBI;
+
+     my $dbh = DBI->connect(...);
+     my $pa = Perinci::Access::Schemeless::DBI->new(dbh => $dbh);
+
+     my $res;
+
+     # will retrieve list of code entities from database
+     $res = $pa->request(list => "/Foo/");
+
+     # will also get metadata from database
+     $res = $pa->request(meta => "/Foo/Bar/func1");
+
+     # the rest are the same like Perinci::Access::Schemeless
+     $res = $pa->request(actions => "/Foo/");
 
 DESCRIPTION
     This subclass of Perinci::Access::Schemeless gets lists of code entities
@@ -33,7 +51,9 @@ DESCRIPTION
      Foo::Baz  func3        {"v":"1.1","summary":"function 3","args":{"a":{"schema":["int",{},{}]}}}
 
 HOW IT WORKS
-    The subclass overrides get_meta() and action_list().
+    The subclass overrides "get_meta()" and "action_list()". Thus, this
+    modifies behaviors of the following Riap actions: "list", "meta",
+    "child_metas".
 
 METHODS
 new(%args) => OBJ
@@ -47,6 +67,22 @@ FAQ
   Rationale for this module?
     If you have a large number of packages and functions, you might want to
     avoid reading Perl modules on the filesystem.
+
+TODO
+    *   Support other types of entities: variables, ...
+
+        Currently only packages and functions are recognized.
+
+    *   Get code from database?
+
+    *   Make into a role?
+
+        So users can mix and match either one or more of these as they see
+        fit: getting list of modules and functions from database, getting
+        metadata from database, and getting code from database.
+
+        Alternatively, this single class can provide all of those and switch
+        to enable each.
 
 SEE ALSO
     Riap, Rinci

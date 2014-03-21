@@ -10,7 +10,7 @@ my $json = JSON->new->allow_nonref;
 
 use parent qw(Perinci::Access::Schemeless);
 
-our $VERSION = '0.01'; # VERSION
+our $VERSION = '0.02'; # VERSION
 
 sub new {
     my $class = shift;
@@ -72,27 +72,39 @@ sub action_list {
     };
 
     my $sth;
+    my %mem;
+
+    my $pkg = $req->{-perl_package};
 
     # get submodules
     unless ($f_type && $f_type ne 'package') {
-        if (length $req->{-perl_package}) {
+        if (length $pkg) {
             $sth = $self->{dbh}->prepare(
                 "SELECT name FROM module WHERE name LIKE ? ORDER BY name");
-            $sth->execute("$req->{-perl_package}\::%");
+            $sth->execute("$pkg\::%");
         } else {
             $sth = $self->{dbh}->prepare(
                 "SELECT name FROM module ORDER BY name");
             $sth->execute;
         }
-        # XXX produce intermediate prefixes (e.g. user requests 'foo::bar' and
-        # db lists 'foo::bar::baz::quux', then we must also produce
-        # 'foo::bar::baz'
         while (my $r = $sth->fetchrow_hashref) {
-            my $m = $r->{name}; $m =~ s!::!/!g;
+            # strip pkg from name
+            my $m = substr($r->{name}, length($pkg));
+
+            # strip :: prefix
+            $m =~ s/\A:://;
+
+            # only take the first sublevel, e.g. if user requests 'foo::bar' and
+            # db lists 'foo::bar::baz::quux', then we only want 'baz'.
+            ($m) = $m =~ /(\w+)/;
+            $m .= "/";
+
+            next if $mem{$m}++;
+
             if ($detail) {
-                push @res, {uri=>"/$m/", type=>"package"};
+                push @res, {uri=>$m, type=>"package"};
             } else {
-                push @res, "/$m/";
+                push @res, $m;
             }
         }
     }
@@ -136,7 +148,26 @@ Perinci::Access::Schemeless::DBI - Subclass of Perinci::Access::Schemeless which
 
 =head1 VERSION
 
-version 0.01
+version 0.02
+
+=head1 SYNOPSIS
+
+ use DBI;
+ use Perinci::Access::Schemeless::DBI;
+
+ my $dbh = DBI->connect(...);
+ my $pa = Perinci::Access::Schemeless::DBI->new(dbh => $dbh);
+
+ my $res;
+
+ # will retrieve list of code entities from database
+ $res = $pa->request(list => "/Foo/");
+
+ # will also get metadata from database
+ $res = $pa->request(meta => "/Foo/Bar/func1");
+
+ # the rest are the same like Perinci::Access::Schemeless
+ $res = $pa->request(actions => "/Foo/");
 
 =head1 DESCRIPTION
 
@@ -167,7 +198,8 @@ the future. An example of the table's contents:
 
 =head1 HOW IT WORKS
 
-The subclass overrides get_meta() and action_list().
+The subclass overrides C<get_meta()> and C<action_list()>. Thus, this modifies
+behaviors of the following Riap actions: C<list>, C<meta>, C<child_metas>.
 
 =head1 METHODS
 
@@ -189,6 +221,27 @@ DBI database handle.
 
 If you have a large number of packages and functions, you might want to avoid
 reading Perl modules on the filesystem.
+
+=head1 TODO
+
+=over
+
+=item * Support other types of entities: variables, ...
+
+Currently only packages and functions are recognized.
+
+=item * Get code from database?
+
+=item * Make into a role?
+
+So users can mix and match either one or more of these as they see fit: getting
+list of modules and functions from database, getting metadata from database, and
+getting code from database.
+
+Alternatively, this single class can provide all of those and switch to enable
+each.
+
+=back
 
 =head1 SEE ALSO
 
