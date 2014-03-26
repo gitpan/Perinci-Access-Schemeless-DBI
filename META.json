@@ -39,7 +39,10 @@
       },
       "test" : {
          "requires" : {
+            "DBD::SQLite" : "0",
+            "DBI" : "0",
             "File::Spec" : "0",
+            "File::chdir" : "0",
             "IO::Handle" : "0",
             "IPC::Open3" : "0",
             "Test::More" : "0.98"
@@ -58,7 +61,7 @@
          "web" : "https://github.com/sharyanto/perl-Perinci-Access-Schemeless-DBI"
       }
    },
-   "version" : "0.02",
+   "version" : "0.03",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.018002"

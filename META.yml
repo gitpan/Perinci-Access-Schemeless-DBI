@@ -3,7 +3,10 @@ abstract: 'Subclass of Perinci::Access::Schemeless which gets lists of entities 
 author:
   - 'Steven Haryanto <stevenharyanto@gmail.com>'
 build_requires:
+  DBD::SQLite: '0'
+  DBI: '0'
   File::Spec: '0'
+  File::chdir: '0'
   IO::Handle: '0'
   IPC::Open3: '0'
   Test::More: '0.98'
@@ -27,7 +30,7 @@ resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=Perinci-Access-Schemeless-DBI
   homepage: https://metacpan.org/release/Perinci-Access-Schemeless-DBI
   repository: git://github.com/sharyanto/perl-Perinci-Access-Schemeless-DBI.git
-version: '0.02'
+version: '0.03'
 x_Dist_Zilla:
   perl:
     version: '5.018002'

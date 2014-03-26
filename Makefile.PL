@@ -28,12 +28,15 @@ my %WriteMakefileArgs = (
     "experimental" => 0
   },
   "TEST_REQUIRES" => {
+    "DBD::SQLite" => 0,
+    "DBI" => 0,
     "File::Spec" => 0,
+    "File::chdir" => 0,
     "IO::Handle" => 0,
     "IPC::Open3" => 0,
     "Test::More" => "0.98"
   },
-  "VERSION" => "0.02",
+  "VERSION" => "0.03",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -41,7 +44,10 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
+  "DBD::SQLite" => 0,
+  "DBI" => 0,
   "File::Spec" => 0,
+  "File::chdir" => 0,
   "IO::Handle" => 0,
   "IPC::Open3" => 0,
   "JSON" => 0,

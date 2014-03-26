@@ -10,7 +10,7 @@ my $json = JSON->new->allow_nonref;
 
 use parent qw(Perinci::Access::Schemeless);
 
-our $VERSION = '0.02'; # VERSION
+our $VERSION = '0.03'; # VERSION
 
 sub new {
     my $class = shift;
@@ -34,7 +34,7 @@ sub get_meta {
         if ($meta) {
             $req->{-meta} = $json->decode($meta);
         } else {
-            return [400, "No metadata found in database"];
+            return [404, "No metadata found in database"];
         }
     } else {
         # XXP check in database, if exists return if not return {v=>1.1}
@@ -148,7 +148,7 @@ Perinci::Access::Schemeless::DBI - Subclass of Perinci::Access::Schemeless which
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 SYNOPSIS
 
