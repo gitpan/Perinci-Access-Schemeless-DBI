@@ -4,7 +4,9 @@ NAME
     from DBI database
 
 VERSION
-    version 0.03
+    This document describes version 0.04 of Perinci::Access::Schemeless::DBI
+    (from Perl distribution Perinci-Access-Schemeless-DBI), released on
+    2014-06-20.
 
 SYNOPSIS
      use DBI;
@@ -63,10 +65,48 @@ new(%args) => OBJ
 
         DBI database handle.
 
+    *   fallback_on_completion => BOOL (default: 0)
+
+        If set to true, then for "complete_arg_val" and "complete_arg_elem",
+        if metadata has a non-coderef "completion" or "element_completion"
+        in its argument spec, then will fallback to parent class
+        Perinci::Access::Schemeless for metadata.
+
 FAQ
   Rationale for this module?
     If you have a large number of packages and functions, you might want to
     avoid reading Perl modules on the filesystem.
+
+  I have completion routine for my argument, completion no longer works?
+    For example, suppose your function metadata is something like this:
+
+     {
+         v => 1.1,
+         summary => 'Delete account',
+         args => {
+             name => {
+                 summary => 'Account name',
+                 completion => sub {
+                     my %args = @_;
+                     my $word = $args{word};
+                     search_accounts(prefix => $word);
+                 },
+             },
+         },
+     }
+
+    When this is stored in the database, most serialization format (JSON
+    included) doesn't save the code in "completion". If you use
+    Data::Clean::JSON, by default the coderef will be replaced with plain
+    string "CODE". This prevents completion to work e.g. if you request with
+    this Riap request:
+
+     {action=>'complete_arg_val', uri=>..., arg=>'name'}
+
+    One solution is to fallback to its parent class
+    Perinci::Access::Schemeless (which reads metadata from Perl source
+    files) for meta request when doing completion. To do this, you can set
+    the attribute "fallback_on_completion".
 
 TODO
     *   Support other types of entities: variables, ...
