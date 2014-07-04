@@ -4,9 +4,9 @@ NAME
     from DBI database
 
 VERSION
-    This document describes version 0.04 of Perinci::Access::Schemeless::DBI
+    This document describes version 0.05 of Perinci::Access::Schemeless::DBI
     (from Perl distribution Perinci-Access-Schemeless-DBI), released on
-    2014-06-20.
+    2014-07-04.
 
 SYNOPSIS
      use DBI;
@@ -34,19 +34,19 @@ DESCRIPTION
     variables).
 
     Currently, you must have a table containing list of packages named
-    "module" with columns "name" (module name), "metadata" (Rinci metadata,
-    encoded in JSON); and a table containing list of functions named
-    "function" with columns "module" (module name), "name" (function name),
-    and "metadata" (normalized Rinci metadata, encoded in JSON). Table and
-    column names will be configurable in the future. An example of the
-    table's contents:
+    "package" with columns "name" (package name), "metadata" (Rinci
+    metadata, encoded in JSON); and a table containing list of functions
+    named "function" with columns "package" (package name), "name" (function
+    name), and "metadata" (normalized Rinci metadata, encoded in JSON).
+    Table and column names will be configurable in the future. An example of
+    the table's contents:
 
      name      metadata
      ----      ---------
      Foo::Bar  (null)
      Foo::Baz  {"v":"1.1"}
 
-     module    name         metadata
+     package   name         metadata
      ------    ----         --------
      Foo::Bar  func1        {"v":"1.1","summary":"function 1","args":{}}
      Foo::Bar  func2        {"v":"1.1","summary":"function 2","args":{}}
@@ -118,7 +118,7 @@ TODO
     *   Make into a role?
 
         So users can mix and match either one or more of these as they see
-        fit: getting list of modules and functions from database, getting
+        fit: getting list of packages and functions from database, getting
         metadata from database, and getting code from database.
 
         Alternatively, this single class can provide all of those and switch
@@ -126,6 +126,8 @@ TODO
 
 SEE ALSO
     Riap, Rinci
+
+    App::UpdateRinciMetadataDb
 
 HOMEPAGE
     Please visit the project's homepage at
