@@ -1,5 +1,8 @@
 package Perinci::Access::Schemeless::DBI;
 
+our $DATE = '2015-01-03'; # DATE
+our $VERSION = '0.06'; # VERSION
+
 use 5.010001;
 use strict;
 use warnings;
@@ -9,8 +12,6 @@ use JSON;
 my $json = JSON->new->allow_nonref;
 
 use parent qw(Perinci::Access::Schemeless);
-
-our $VERSION = '0.05'; # VERSION
 
 sub new {
     my $class = shift;
@@ -203,7 +204,7 @@ Perinci::Access::Schemeless::DBI - Subclass of Perinci::Access::Schemeless which
 
 =head1 VERSION
 
-This document describes version 0.05 of Perinci::Access::Schemeless::DBI (from Perl distribution Perinci-Access-Schemeless-DBI), released on 2014-07-04.
+This document describes version 0.06 of Perinci::Access::Schemeless::DBI (from Perl distribution Perinci-Access-Schemeless-DBI), released on 2015-01-03.
 
 =head1 SYNOPSIS
 
@@ -314,27 +315,6 @@ One solution is to fallback to its parent class L<Perinci::Access::Schemeless>
 (which reads metadata from Perl source files) for meta request when doing
 completion. To do this, you can set the attribute C<fallback_on_completion>.
 
-=head1 TODO
-
-=over
-
-=item * Support other types of entities: variables, ...
-
-Currently only packages and functions are recognized.
-
-=item * Get code from database?
-
-=item * Make into a role?
-
-So users can mix and match either one or more of these as they see fit: getting
-list of packages and functions from database, getting metadata from database,
-and getting code from database.
-
-Alternatively, this single class can provide all of those and switch to enable
-each.
-
-=back
-
 =head1 SEE ALSO
 
 L<Riap>, L<Rinci>
@@ -359,11 +339,11 @@ feature.
 
 =head1 AUTHOR
 
-Steven Haryanto <stevenharyanto@gmail.com>
+perlancar <perlancar@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Steven Haryanto.
+This software is copyright (c) 2015 by perlancar@cpan.org.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
